@@ -25,7 +25,10 @@
         // const todoList = [
         //     {
         //         title:"오늘 할 일",
-        //         start:"2024-07-12"
+        //         start:"2024-07-12",
+        //         //시간이 있으면 점으로 찍힌다.  시간이 없고 날짜만 있으면 줄로찍힌다.
+        //         end:"2024-07-15",
+        //
         //     },
         //     {
         //         title:"내일 할 일",
@@ -37,7 +40,9 @@
         console.log(todoList);
         const calendarEl = calendar02;
         const calendar = new FullCalendar.Calendar(calendarEl, {
+            height:600,
             initialView: 'dayGridMonth',
+            locale: 'ko',
             events: todoList
         });
         calendar.render();

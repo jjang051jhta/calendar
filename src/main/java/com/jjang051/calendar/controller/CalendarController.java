@@ -27,15 +27,17 @@ public class CalendarController {
 
     @PostMapping("/insert")
     public String insertProcess(@ModelAttribute CalendarDto calendarDto) {
-        CalendarDto sendCalendarDto = CalendarDto.builder()
+        CalendarDto sendCalendarDto =null;
+
+        sendCalendarDto = CalendarDto.builder()
                 .start(calendarDto.getStart()+" "+calendarDto.getStartTime())
-                .end(calendarDto.getEnd()+" "+calendarDto.getEndTime())
+                .end(calendarDto.getEnd()+" "+calendarDto.getStartTime())
                 .title(calendarDto.getTitle())
                 .allDay(calendarDto.isAllDay())
                 .build();
         log.info("sendCalendarDto==={}",sendCalendarDto.toString());
         calendarService.insertCalendar(sendCalendarDto);
-        //log.info("===={}",calendarDto.isAllDay() ? 'Y':'N');
+        log.info("===={}",sendCalendarDto.isAllDay());
         return "redirect:/";
     }
 

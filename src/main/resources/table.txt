@@ -1,0 +1,18 @@
+오라클용
+create table calendar(
+ id number,
+ title varchar2(1000),
+ startdate date,
+ enddate date,
+ allday char(1)
+);
+
+
+h2용
+create table calendar(
+ id number,
+ title varchar2(1000),
+ startdate date,
+ enddate date,
+ allday boolean
+);

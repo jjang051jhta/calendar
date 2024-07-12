@@ -5,13 +5,13 @@
     <title>Title</title>
 </head>
 <body>
-    <form action="/calendar/insert" method="post" th:object="${calendarDto}">
+    <form action="/calendar/insert" method="post">
         <div><input type="text" name="title"></div>
         <div><input type="date" name="start"></div>
         <div><input type="time" name="startTime"></div>
         <div><input type="date" name="end"></div>
         <div><input type="time" name="endTime"></div>
-        <div><label>all day</label><input type="checkbox" th:field="*{allDay}"></div>
+        <div><label>all day</label><input type="checkbox" name="allDay"></div>
         <button>일정추가</button>
     </form>
 </body>

@@ -4,9 +4,28 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jjang051.calendar.dao.CalendarDao">
     <insert id="insertCalendar" parameterType="CalendarDto">
-        insert into calendar values(calendar_seq.nextval,#{title},#{start},#{end},#{allDay})
+<!--        insert into calendar_table values(calendar_seq.nextval,#{title},#{start},#{end},#{allDay})-->
+        INSERT INTO calendar values(
+            calendar_seq.nextval,
+            #{title},
+            to_date(#{start},'YYYY-MM-DD HH24:MI'),
+            <choose>
+                <when test="allDay==true">to_date(#{end},'YYYY-MM-DD HH24:MI')+1</when>
+                <otherwise>to_date(#{end},'YYYY-MM-DD HH24:MI')</otherwise>
+            </choose>,
+            #{allDay}
+        )
     </insert>
     <select id="getAllTodo">
-        select id,title, startdate as "start", enddate as "end" from calendar
+<!--        SELECT * FROM BLOG WHERE state = ‘ACTIVE’-->
+<!--        <choose>-->
+<!--            <when test="title != null">-->
+<!--                AND title like #{title}-->
+<!--            </when>-->
+<!--            <when test=test="author != null and author.name != null">-->
+<!--                AND author_name like #{author.name}-->
+<!--            </when>-->
+<!--        </choose>-->
+        select id,title, to_date(startdate,'YYYY-MM-DD') as "start", to_date(enddate,'YYYY-MM-DD') as "end" from calendar
     </select>
 </mapper>
