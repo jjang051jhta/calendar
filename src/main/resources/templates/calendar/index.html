@@ -54,42 +54,63 @@
     console.log(calendar02);
 
 
-        const todoList = [[${calendarDtoList}]];
-        console.log(todoList);
-        const calendarEl = calendar02;
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-            height:600,
-            initialView: 'dayGridMonth',
-            locale: 'ko',
-            events: todoList,
-            selectable:true,
-            select:function(e) {
-                console.log(e);
-                $("#calendarModal input[name='start']").val(e.startStr);
-                $("#calendarModal input[name='end']").val(e.startStr);
-                calendarModal.show();
+    const todoList = [[${calendarDtoList}]];
+    console.log(todoList);
+    const calendarEl = calendar02;
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        height:600,
+        initialView: 'dayGridMonth',
+        locale: 'ko',
+        events: todoList,
+        dayMaxEvents: true,
+        selectable:true,
+        editable: true, // 수정 가능?
+        eventAdd: function (obj) {
+            // 이벤트가 추가되면 발생하는 이벤트
+            console.log(obj);
+        },
+        eventChange: function (obj) {
+            // 이벤트가 수정되면 발생하는 이벤트
+            console.log(obj);
+        },
+        eventRemove: function (obj) {
+            // 이벤트가 삭제되면 발생하는 이벤트
+            console.log(obj);
+        },
+        select:function(e) {
+            console.log(e);
+            $("#calendarModal input[name='start']").val(e.startStr);
+            $("#calendarModal input[name='end']").val(e.startStr);
+            calendarModal.show();
 
 
-            }
+        }
 
-        });
-        calendar.render();
+    });
+    calendar.render();
 
     $("#btn-send").on("click",function(e){
         e.preventDefault();
-        const sendData={}; //여기에 데이터 실으면 됨
+        const sendData=$("#calendar-form").serialize(); //여기에 데이터 실으면 됨
         $.ajax({
             //url:"/calendar/insert",
             url:"/calendar/json-list",
-            //method:"post",
-            //data:sendData,
+            method:"POST",
+            data:sendData,
             success:function(res) {
                 console.log(res);
                 //location.reload();
-                //calendar.events(res.calendarDtoList);
+
                 calendar.refetchEvents();
+               // calendar.events(res.calendarDtoList);
                 calendar.render();
                 calendarModal.hide();
+                calendar.addEvent({
+                    title: title,
+                    start: arg.start,
+                    end: arg.end,
+                    allDay: arg.allDay,
+                });
             }
         })
     })

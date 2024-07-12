@@ -25,6 +25,12 @@ public class CalendarController {
     @PostMapping("/insert")
     public String insertProcess(@ModelAttribute CalendarDto calendarDto) {
         CalendarDto sendCalendarDto =null;
+        if(calendarDto.getStartTime().isBlank()) {
+            calendarDto.setStartTime("00:00");
+        }
+        if(calendarDto.getEndTime().isBlank()) {
+            calendarDto.setEndTime("00:00");
+        }
 
         sendCalendarDto = CalendarDto.builder()
                 .start(calendarDto.getStart()+" "+calendarDto.getStartTime())
@@ -44,12 +50,25 @@ public class CalendarController {
         model.addAttribute("calendarDtoList",calendarDtoList);
         return "calendar/index";
     }
-    @GetMapping("/json-list")
+    @PostMapping("/json-list")
     @ResponseBody
-    public List<CalendarDto> jsonList(Model model) {
+    public List<CalendarDto> jsonList(@ModelAttribute CalendarDto calendarDto, Model model) {
+        CalendarDto sendCalendarDto =null;
+        if(calendarDto.getStartTime().isEmpty()) {
+            calendarDto.setStartTime("00:00");
+        }
+        if(calendarDto.getEndTime().isEmpty()) {
+            calendarDto.setEndTime("00:00");
+        }
+
+        sendCalendarDto = CalendarDto.builder()
+                .start(calendarDto.getStart()+" "+calendarDto.getStartTime())
+                .end(calendarDto.getEnd()+" "+calendarDto.getStartTime())
+                .title(calendarDto.getTitle())
+                .allDay(calendarDto.isAllDay())
+                .build();
+        calendarService.insertCalendar(sendCalendarDto);
         List<CalendarDto> calendarDtoList  = calendarService.getAllTodo();
-        model.addAttribute("calendarDtoList",calendarDtoList);
         return calendarDtoList;
     }
-
 }
