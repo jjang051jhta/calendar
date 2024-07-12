@@ -26,6 +26,6 @@
 <!--                AND author_name like #{author.name}-->
 <!--            </when>-->
 <!--        </choose>-->
-        select id,title, to_date(startdate,'YYYY-MM-DD') as "start", to_date(enddate,'YYYY-MM-DD') as "end" from calendar
+        select id,title,startdate as "start", enddate as "end", allDay from calendar
     </select>
 </mapper>
