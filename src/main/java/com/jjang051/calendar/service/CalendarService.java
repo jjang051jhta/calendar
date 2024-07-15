@@ -22,4 +22,8 @@ public class CalendarService {
     public int updateCalendar(CalendarDto calendarDto) {
         return calendarDao.updateCalendar(calendarDto);
     }
+
+    public int deleteCalendar(CalendarDto calendarDto) {
+        return calendarDao.deleteCalendar(calendarDto);
+    }
 }

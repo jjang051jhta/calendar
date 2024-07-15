@@ -11,4 +11,6 @@ public interface CalendarDao {
     List<CalendarDto> getAllTodo();
 
     int updateCalendar(CalendarDto calendarDto);
+
+    int deleteCalendar(CalendarDto calendarDto);
 }

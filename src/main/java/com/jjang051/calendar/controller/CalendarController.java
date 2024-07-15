@@ -62,4 +62,18 @@ public class CalendarController {
         }
         return resultMap;
     }
+
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public Map<String, String> delete(@RequestBody CalendarDto calendarDto) {
+        log.info("calendarDto==={}",calendarDto);
+        int result = calendarService.deleteCalendar(calendarDto);
+        Map<String, String> resultMap = new HashMap<>();
+        if(result>0) {
+            resultMap.put("isInsert","ok");
+        } else {
+            resultMap.put("isInsert","fail");
+        }
+        return resultMap;
+    }
 }

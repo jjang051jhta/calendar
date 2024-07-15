@@ -33,4 +33,8 @@
         allDay = #{allDay}
         where id = #{id}
     </update>
+    <delete id="deleteCalendar" parameterType="CalendarDto">
+        delete from calendar where id = #{id}
+    </delete>
+
 </mapper>

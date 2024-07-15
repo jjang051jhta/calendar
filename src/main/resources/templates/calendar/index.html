@@ -25,6 +25,7 @@
                     <div class="mt-3"><input type="time" class="form-control"  name="startTime"></div>
                     <div class="mt-3"><input type="date" class="form-control"  name="end"></div>
                     <div class="mt-3"><input type="time" class="form-control"  name="endTime"></div>
+                    <div class="mt-3"><input type="text" class="form-control"  name="id"></div>
                     <div class="mt-3"><label>all day</label><input type="checkbox" name="allDay" value="true"></div>
                     <button class="btn btn-primary mt-5" type="button" id="btn-send">일정추가</button>
 <!--                    일정추가 버튼을 누르면 ajax통해서 db에 데이터 입력하고-->
@@ -33,7 +34,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Understood</button>
+                <button type="button" class="btn btn-danger" id="btn-delete">DELETE</button>
+                <button type="button" class="btn btn-danger" id="btn-path-delete">PATH-DELETE</button>
             </div>
         </div>
     </div>
@@ -64,6 +66,7 @@
                 $("#calendar-form input[name='start']").val(e.startStr);
                 $("#calendar-form input[name='end']").val(e.startStr);
                 calendarModal.show();
+                $("#calendar-form #btn-send").show();
                 console.log(e);
                 //alert("date click");
                 //modal
@@ -72,8 +75,15 @@
               console.log("날짜 클릭");
 
             },
-            eventClick:function() {
+            eventClick:function(e) {
                 console.log("이벤트 클릭");
+                console.log(e);
+                $("#calendar-form input[name='title']").val(e.event.title);
+                $("#calendar-form input[name='start']").val(e.event.startStr);
+                $("#calendar-form input[name='end']").val(e.event.endStr);
+                $("#calendar-form input[name='id']").val(e.event.id);
+                $("#calendar-form #btn-send").hide();
+                calendarModal.show();
             },
             eventChange:function(e) {
                 console.log(e);
@@ -150,6 +160,36 @@
             $.ajax({
                 url:"/calendar/insert",
                 method:"POST",
+                data:JSON.stringify(sendData),
+                contentType:"application/json", //application/x-www-form-urlencoded
+                success:function(res) {
+                    console.log(res); //{isInsert:"ok"}
+                    calendarModal.hide();
+                    calendar.refetchEvents();
+                    //location.reload();
+                }
+            })
+            //제대로 입력이 되었을때...
+            //calendarModal.hide();
+        });
+        $("#btn-delete").on("click",function(){
+            //const sendData = $("#calendar-form").serialize();
+            const sendData = {
+                title:$("#calendar-form input[name='title']").val(),
+                start:$("#calendar-form input[name='start']").val(),
+                startTime:$("#calendar-form input[name='startTime']").val(),
+                end:$("#calendar-form input[name='end']").val(),
+                endTime:$("#calendar-form input[name='endTime']").val(),
+                id:$("#calendar-form input[name='id']").val(),
+                //allDay:true, //바껴야 될거 같음
+                allDay:
+                    $("#calendar-form input[name='allDay']").is(":checked"),
+            };
+            // title=fkjsfkds&start=fdsjf&end=fdsfdhsk
+            // json으로 보내기
+            $.ajax({
+                url:"/calendar/delete",
+                method:"DELETE",
                 data:JSON.stringify(sendData),
                 contentType:"application/json", //application/x-www-form-urlencoded
                 success:function(res) {
