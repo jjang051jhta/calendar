@@ -25,7 +25,7 @@
                     <div class="mt-3"><input type="time" class="form-control"  name="startTime"></div>
                     <div class="mt-3"><input type="date" class="form-control"  name="end"></div>
                     <div class="mt-3"><input type="time" class="form-control"  name="endTime"></div>
-                    <div class="mt-3"><label>all day</label><input type="checkbox" name="allDay" ></div>
+                    <div class="mt-3"><label>all day</label><input type="checkbox" name="allDay" value="true"></div>
                     <button class="btn btn-primary mt-5" type="button" id="btn-send">일정추가</button>
 <!--                    일정추가 버튼을 누르면 ajax통해서 db에 데이터 입력하고-->
 <!--                    제대로 입력된걸 서버가 알려주면 modal창을 닫으면 된다.-->
@@ -60,6 +60,7 @@
             selectable:true,
             editable:true,
             select:function(e) {
+                $("#calendar-form input[name='title']").val("");
                 $("#calendar-form input[name='start']").val(e.startStr);
                 $("#calendar-form input[name='end']").val(e.startStr);
                 calendarModal.show();
@@ -67,53 +68,70 @@
                 //alert("date click");
                 //modal
             },
-            events: [
-                { // this object will be "parsed" into an Event Object
-                    title: '월요일입니다.', // a property!
-                    start: '2024-07-15 09:15', // a property!
-                    end: '2024-07-15 10:00', // a property! ** see important note below about 'end' **
-                    allDay:true,
-                    // url:"http://www.daum.net",
-                    // backgroundColor:"#ff0000",
-                    // borderColor:"#ff0000",
-                    // textColor:"#ffffff"
+            events:{
+                url:"/calendar/json-list",
+                failure:function() {
+                  alert("오류 발생");
                 },
-                { // this object will be "parsed" into an Event Object
-                    title: '화요일입니다.', // a property!
-                    start: '2024-07-16', // a property!
-                    end: '2024-07-16' // a property! ** see important note below about 'end' **
-                },
-            ]
+                success:function(res) {
+                    console.log("refetchEvents 발생");
+                    return res;
+                }
+            }
+            // events: [
+            //     { // this object will be "parsed" into an Event Object
+            //         title: '월요일입니다.', // a property!
+            //         start: '2024-07-15 09:15', // a property!
+            //         end: '2024-07-15 10:00', // a property! ** see important note below about 'end' **
+            //         allDay:true,
+            //         // url:"http://www.daum.net",
+            //         // backgroundColor:"#ff0000",
+            //         // borderColor:"#ff0000",
+            //         // textColor:"#ffffff"
+            //     },
+            //     { // this object will be "parsed" into an Event Object
+            //         title: '화요일입니다.', // a property!
+            //         start: '2024-07-16', // a property!
+            //         end: '2024-07-16' // a property! ** see important note below about 'end' **
+            //     },
+            // ]
         });
         calendar.render();
+
+        $("#btn-send").on("click",function(){
+            //const sendData = $("#calendar-form").serialize();
+            console.log("allDay===",
+                $("#calendar-form input[name='allDay']").is(":checked"));
+            const sendData = {
+                title:$("#calendar-form input[name='title']").val(),
+                start:$("#calendar-form input[name='start']").val(),
+                startTime:$("#calendar-form input[name='startTime']").val(),
+                end:$("#calendar-form input[name='end']").val(),
+                endTime:$("#calendar-form input[name='endTime']").val(),
+                //allDay:true, //바껴야 될거 같음
+                allDay:
+               $("#calendar-form input[name='allDay']").is(":checked"),
+            };
+            // title=fkjsfkds&start=fdsjf&end=fdsfdhsk
+            // json으로 보내기
+            $.ajax({
+                url:"/calendar/insert",
+                method:"POST",
+                data:JSON.stringify(sendData),
+                contentType:"application/json", //application/x-www-form-urlencoded
+                success:function(res) {
+                    console.log(res); //{isInsert:"ok"}
+                    calendarModal.hide();
+                    calendar.refetchEvents();
+                    //location.reload();
+                }
+            })
+            //제대로 입력이 되었을때...
+            //calendarModal.hide();
+        })
     });
 
-    $("#btn-send").on("click",function(){
-        //const sendData = $("#calendar-form").serialize();
-        const sendData = {
-            title:$("#calendar-form input[name='title']").val(),
-            start:$("#calendar-form input[name='start']").val(),
-            startTime:$("#calendar-form input[name='startTime']").val(),
-            end:$("#calendar-form input[name='end']").val(),
-            endTime:$("#calendar-form input[name='endTime']").val(),
-            allDay:true,
-            //allDay:$("#calendar-form input[name='allDay']").val(),
-        };
-        // title=fkjsfkds&start=fdsjf&end=fdsfdhsk
-        // json으로 보내기
-        $.ajax({
-            url:"/calendar/insert",
-            method:"POST",
-            data:JSON.stringify(sendData),
-            contentType:"application/json", //application/x-www-form-urlencoded
-            success:function(res) {
-                console.log(res); //{isInsert:"ok"}
-                calendarModal.hide();
-            }
-        })
-        //제대로 입력이 되었을때...
-        //calendarModal.hide();
-    })
+
 </script>
 </body>
 </html>

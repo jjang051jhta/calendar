@@ -23,6 +23,11 @@ public class CalendarController {
     public String list() {
         return "calendar/index";
     }
+    @GetMapping("/json-list")
+    @ResponseBody
+    public List<CalendarDto> jsonList() {
+        return calendarService.getAllTodo();
+    }
 
 //    @PostMapping("/insert")
 //    @ResponseBody
