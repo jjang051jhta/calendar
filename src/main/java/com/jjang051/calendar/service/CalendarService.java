@@ -18,4 +18,8 @@ public class CalendarService {
     public List<CalendarDto> getAllTodo() {
         return calendarDao.getAllTodo();
     }
+
+    public int updateCalendar(CalendarDto calendarDto) {
+        return calendarDao.updateCalendar(calendarDto);
+    }
 }

@@ -25,4 +25,12 @@
 <!--        </choose>-->
         select id,title,startdate as "start", enddate as "end", allDay from calendar
     </select>
+    <update id="updateCalendar" parameterType="CalendarDto">
+        update calendar set
+        title = #{title},
+        startDate = #{start},
+        endDate = #{end},
+        allDay = #{allDay}
+        where id = #{id}
+    </update>
 </mapper>

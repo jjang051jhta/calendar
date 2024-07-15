@@ -68,6 +68,32 @@
                 //alert("date click");
                 //modal
             },
+            eventChange:function(e) {
+                console.log(e);
+                const sendData = {
+                    title:e.event.title,
+                    start:e.event.startStr,
+                    //startTime:"",
+                    end:e.event.endStr,
+                    //endTime:,
+                    //allDay:true, //바껴야 될거 같음
+                    allDay:e.event.allDay,
+                    id:e.event.id
+                };
+
+                $.ajax({
+                    url:"/calendar/update",
+                    method:"PUT",  //GET / POST / PUT(PATCH) / DELETE
+                    data:JSON.stringify(sendData),
+                    contentType:"application/json", //application/x-www-form-urlencoded
+                    success:function(res) {
+                        console.log(res); //{isInsert:"ok"}
+                        calendarModal.hide();
+                        calendar.refetchEvents();
+                        //location.reload();
+                    }
+                })
+            },
             events:{
                 url:"/calendar/json-list",
                 failure:function() {

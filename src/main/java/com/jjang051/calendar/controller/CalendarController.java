@@ -49,4 +49,17 @@ public class CalendarController {
         }
         return resultMap;
     }
+    @PutMapping("/update")
+    @ResponseBody
+    public Map<String, String> update(@RequestBody CalendarDto calendarDto) {
+        log.info("calendarDto==={}",calendarDto);
+        int result = calendarService.updateCalendar(calendarDto);
+        Map<String, String> resultMap = new HashMap<>();
+        if(result>0) {
+            resultMap.put("isInsert","ok");
+        } else {
+            resultMap.put("isInsert","fail");
+        }
+        return resultMap;
+    }
 }

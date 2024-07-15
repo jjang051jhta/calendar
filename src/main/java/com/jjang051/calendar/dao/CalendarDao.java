@@ -9,4 +9,6 @@ import java.util.List;
 public interface CalendarDao {
     int insertCalendar(CalendarDto calendarDto);
     List<CalendarDto> getAllTodo();
+
+    int updateCalendar(CalendarDto calendarDto);
 }
