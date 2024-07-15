@@ -8,7 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -22,4 +24,24 @@ public class CalendarController {
         return "calendar/index";
     }
 
+//    @PostMapping("/insert")
+//    @ResponseBody
+//    public String insert(@ModelAttribute CalendarDto calendarDto) {
+//        //localhost:8081/calendar/insert?title=점심약속
+//        log.info("calendarDto==={}",calendarDto);
+//        return "fdfsds";
+//    }
+    @PostMapping("/insert")
+    @ResponseBody
+    public Map<String, String> insert(@RequestBody CalendarDto calendarDto) {
+        log.info("calendarDto==={}",calendarDto);
+        int result = calendarService.insertCalendar(calendarDto);
+        Map<String, String> resultMap = new HashMap<>();
+        if(result>0) {
+            resultMap.put("isInsert","ok");
+        } else {
+            resultMap.put("isInsert","fail");
+        }
+        return resultMap;
+    }
 }
