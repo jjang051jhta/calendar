@@ -185,6 +185,7 @@
                 allDay:
                     $("#calendar-form input[name='allDay']").is(":checked"),
             };
+            const id = $("#calendar-form input[name='id']").val()
             // title=fkjsfkds&start=fdsjf&end=fdsfdhsk
             // json으로 보내기
             $.ajax({
@@ -192,6 +193,25 @@
                 method:"DELETE",
                 data:JSON.stringify(sendData),
                 contentType:"application/json", //application/x-www-form-urlencoded
+                success:function(res) {
+                    console.log(res); //{isInsert:"ok"}
+                    calendarModal.hide();
+                    calendar.refetchEvents();
+                    //location.reload();
+                }
+            })
+            //제대로 입력이 되었을때...
+            //calendarModal.hide();
+        });
+        $("#btn-path-delete").on("click",function(){
+            //const sendData = $("#calendar-form").serialize();
+
+            const id = $("#calendar-form input[name='id']").val()
+            // title=fkjsfkds&start=fdsjf&end=fdsfdhsk
+            // json으로 보내기
+            $.ajax({
+                url:"/calendar/delete/"+id,
+                method:"DELETE",
                 success:function(res) {
                     console.log(res); //{isInsert:"ok"}
                     calendarModal.hide();

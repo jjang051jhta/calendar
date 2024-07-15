@@ -36,5 +36,9 @@
     <delete id="deleteCalendar" parameterType="CalendarDto">
         delete from calendar where id = #{id}
     </delete>
+    <delete id="deleteCalendar02" parameterType="int">
+        delete from calendar where id = #{id}
+    </delete>
+
 
 </mapper>
